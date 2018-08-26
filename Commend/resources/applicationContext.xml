@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:component-scan base-package="com.dingli.commend"></context:component-scan>
+	
+	<!-- 配置数据源  -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<bean id="commenddb" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	
+		<property name="url" value="${jdbc_url}"></property>
+		<property name="driverClassName" value="${jdbc_driver}"></property>
+		<property name="username" value="${name}"></property>
+		<property name="password" value="${password}"></property>	
+	</bean>
+	
+	<!-- spring 和 mybatis整合配置 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<property name="dataSource" ref="commenddb"></property>
+		<property name="mapperLocations" value="classpath*:mapper/*.xml"></property>	
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">	
+		<property name="basePackage" value="com.dingli.commend.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
+	
+	</bean>
+	
+
+</beans>
